@@ -19,6 +19,7 @@ class Handler(object):
         logging.info('Initiate actor')
 
     def validate(self):
+        print(ray.actor.exit_actor())
         logging.info('Validate file')
 
     def move(self):
@@ -30,9 +31,10 @@ class Handler(object):
     def return_file_chunks(self):
         logging.info('Return file chunks')
 
+
 @ray.remote
 def worker(file):
-    time.sleep(5)
+    time.sleep(1)
     db.save(file)
     handler = Handler.remote()
     handler.validate.remote()
@@ -40,6 +42,10 @@ def worker(file):
     handler.split_content.remote()
     handler.return_file_chunks.remote()
     print(file)
+
+def some(i):
+    time.sleep(2)
+    print(i)
     
 ''' TODO: Error handling, os termination, app errors. Termination over certain conditions reached '''
 
@@ -51,9 +57,13 @@ def main():
 
     with ray.profile('Event'):
 
-        results = [worker.remote(file) for file in (files)]
-        ray.get(results)
+        for _ in range(4):
+            ray.get(worker.remote(i))
+
+        #results = [worker.remote(file) for file in (files)]
+        #ray.get(results)
 
 if __name__ == '__main__':
     main()
     ray.timeline(filename='timeline.dump')
+    print(ray.errors())

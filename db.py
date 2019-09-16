@@ -59,7 +59,7 @@ class Database(object):
             if (self.connection):
                 self.connection.close()
                 logging.info('The database connection is closed')  
-        except Exception as e:
+        except Exception as error:
             logging.error('Failed to close database connection %s', error)
 
 
