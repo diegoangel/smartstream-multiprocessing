@@ -26,7 +26,7 @@ class Database(object):
             query = '''CREATE TABLE IF NOT EXISTS some_table (
                             id INTEGER PRIMARY KEY,
                             future TEXT NOT NULL,
-                            date datetime);'''
+                            date DATETIME);'''
 
             cursor = self.connection.cursor()
             cursor.execute(query)
@@ -59,11 +59,10 @@ class Database(object):
             if (self.connection):
                 self.connection.close()
                 logging.info('The database connection is closed')  
-        except Exception as error:
+        except sqlite3.Error as error:
             logging.error('Failed to close database connection %s', error)
 
 
-            
 def setup():
     db = Database()
     db.connect()
@@ -73,5 +72,5 @@ def setup():
 def save(file):
     db = Database()
     db.connect()
-    db.insert()
+    db.insert(file)
     db.disconnect()
