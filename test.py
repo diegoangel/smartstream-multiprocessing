@@ -32,10 +32,10 @@ def watchdog(q):
 
 def main():
     db.setup()
-    PROCESSES = 4
+    PROCESSES = 5
     print('Creating pool with %d processes\n' % PROCESSES)
 
-    with multiprocessing.Pool(PROCESSES) as pool:        
+    with mp.Pool(PROCESSES) as pool:        
         """The main process"""
         q = mp.Queue()
 
@@ -50,7 +50,7 @@ def main():
         wdog.start()
 
         # Poll the queue
-        while True:
+        for i in range(9):
             msg = q.get()
             if msg == "KILL WORKER":
                 print("[MAIN]: Terminating slacking WORKER")
@@ -58,7 +58,7 @@ def main():
                 time.sleep(0.1)
                 if not workr.is_alive():
                     print("[MAIN]: WORKER is a goner")
-                    workr.join(timeout=1.0)
+                    workr.join()
                     print("[MAIN]: Joined WORKER successfully!")
                     q.close()
                     break # watchdog process daemon gets terminated

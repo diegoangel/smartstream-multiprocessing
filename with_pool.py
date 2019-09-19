@@ -16,7 +16,7 @@ def calculate(func, args):
     logger.addHandler(fh)
     logger.debug('INFO')
 
-    db.save(file=multiprocessing.current_process().name)
+    db.save(multiprocessing.current_process().name)
 
     result = func(*args)
     print(os.getpid(), os.getppid())
@@ -86,77 +86,77 @@ def test():
         # Test error handling
         #
 
-        print('Testing error handling:')
+        # print('Testing error handling:')
 
-        try:
-            print(pool.apply(f, (5,)))
-            print('\t', os.getpid())
-        except ZeroDivisionError:
-            print('\tGot ZeroDivisionError as expected from pool.apply()')
-        else:
-            raise AssertionError('expected ZeroDivisionError')
+        # try:
+        #     print(pool.apply(f, (5,)))
+        #     print('\t', os.getpid())
+        # except ZeroDivisionError:
+        #     print('\tGot ZeroDivisionError as expected from pool.apply()')
+        # else:
+        #     raise AssertionError('expected ZeroDivisionError')
 
-        try:
-            print(pool.map(f, list(range(10))))
-            print('\t', os.getpid())
-        except ZeroDivisionError:
-            print('\tGot ZeroDivisionError as expected from pool.map()')
-        else:
-            raise AssertionError('expected ZeroDivisionError')
+        # try:
+        #     print(pool.map(f, list(range(10))))
+        #     print('\t', os.getpid())
+        # except ZeroDivisionError:
+        #     print('\tGot ZeroDivisionError as expected from pool.map()')
+        # else:
+        #     raise AssertionError('expected ZeroDivisionError')
 
-        try:
-            print(list(pool.imap(f, list(range(10)))))
-            print('\t', os.getpid())
-        except ZeroDivisionError:
-            print('\tGot ZeroDivisionError as expected from list(pool.imap())')
-        else:
-            raise AssertionError('expected ZeroDivisionError')
+        # try:
+        #     print(list(pool.imap(f, list(range(10)))))
+        #     print('\t', os.getpid())
+        # except ZeroDivisionError:
+        #     print('\tGot ZeroDivisionError as expected from list(pool.imap())')
+        # else:
+        #     raise AssertionError('expected ZeroDivisionError')
 
-        it = pool.imap(f, list(range(10)))
-        for i in range(10):
-            try:
-                x = next(it)
-            except ZeroDivisionError:
-                if i == 5:
-                    pass
-            except StopIteration:
-                break
-            else:
-                if i == 5:
-                    raise AssertionError('expected ZeroDivisionError')
+        # it = pool.imap(f, list(range(10)))
+        # for i in range(10):
+        #     try:
+        #         x = next(it)
+        #     except ZeroDivisionError:
+        #         if i == 5:
+        #             pass
+        #     except StopIteration:
+        #         break
+        #     else:
+        #         if i == 5:
+        #             raise AssertionError('expected ZeroDivisionError')
 
-        assert i == 9
-        print('\tGot ZeroDivisionError as expected from IMapIterator.next()')
-        print()
+        # assert i == 9
+        # print('\tGot ZeroDivisionError as expected from IMapIterator.next()')
+        # print()
 
-        #
-        # Testing timeouts
-        #
+        # #
+        # # Testing timeouts
+        # #
 
-        print('Testing ApplyResult.get() with timeout:', end=' ')
-        res = pool.apply_async(calculate, TASKS[0])
-        while 1:
-            sys.stdout.flush()
-            try:
-                sys.stdout.write('\n\t%s' % res.get(0.02))
-                break
-            except multiprocessing.TimeoutError:
-                sys.stdout.write('.')
-        print()
-        print()
+        # print('Testing ApplyResult.get() with timeout:', end=' ')
+        # res = pool.apply_async(calculate, TASKS[0])
+        # while 1:
+        #     sys.stdout.flush()
+        #     try:
+        #         sys.stdout.write('\n\t%s' % res.get(0.02))
+        #         break
+        #     except multiprocessing.TimeoutError:
+        #         sys.stdout.write('.')
+        # print()
+        # print()
 
-        print('Testing IMapIterator.next() with timeout:', end=' ')
-        it = pool.imap(calculatestar, TASKS)
-        while 1:
-            sys.stdout.flush()
-            try:
-                sys.stdout.write('\n\t%s' % it.next(0.02))
-            except StopIteration:
-                break
-            except multiprocessing.TimeoutError:
-                sys.stdout.write('.')
-        print()
-        print()
+        # print('Testing IMapIterator.next() with timeout:', end=' ')
+        # it = pool.imap(calculatestar, TASKS)
+        # while 1:
+        #     sys.stdout.flush()
+        #     try:
+        #         sys.stdout.write('\n\t%s' % it.next(0.02))
+        #     except StopIteration:
+        #         break
+        #     except multiprocessing.TimeoutError:
+        #         sys.stdout.write('.')
+        # print()
+        # print()
 
 if __name__ == '__main__':
     multiprocessing.freeze_support()
