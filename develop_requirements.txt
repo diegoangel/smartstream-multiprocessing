@@ -23,7 +23,7 @@ pyflakes==2.1.1
 pyparsing==2.4.2
 pyrsistent==0.15.4
 pytest==5.1.2
-PyYAML==5.1.2
+PyYAML==5.4
 ray==0.7.4
 redis==3.3.8
 setproctitle==1.1.10
